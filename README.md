@@ -1,3 +1,4 @@
+
 # qws-interview
 
 这次开源的是一个 AI 采访 skill。
@@ -51,11 +52,19 @@ AI 采访可以采访：
 npx -y skills add QianWenFlow/qwskill -g --all
 ```
 
-安装后回到 Agent，输入 `/qws-interview`，或者直接用自然语言说明你想接受采访的经历、感受、想法或判断。
+安装后会得到两个入口：
+
+- `/qws`：统一入口，在当前公开包中会进入 AI 采访；
+- `/qws-interview`：直接进入 AI 采访。
+
+也可以直接用自然语言说明你想接受采访的经历、感受、想法或判断。
 
 ## 调用方式
 
 ```text
+/qws
+
+# 或者直接调用采访入口
 /qws-interview
 ```
 
@@ -105,7 +114,9 @@ qwskill/
 ├── README.md
 ├── LICENSE
 └── skills/
-    └── qws-interview/
+    ├── qws/
+    │   └── SKILL.md
+    └── qws-interview/
         ├── SKILL.md
         ├── agents/openai.yaml
         ├── scripts/
