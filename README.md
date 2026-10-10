@@ -66,13 +66,13 @@ npx -y skills add QianWenFlow/qwskill -g --all
 
 ## 更新
 
-如果此前已经安装，可以更新两个公开入口：
+已经安装过 QW Skill，可以执行下面的命令更新到最新版：
 
 ```bash
 npx -y skills update qws qws-interview -g -y
 ```
 
-重新执行上面的安装命令，也会覆盖为最新版本。如果更新命令提示没有找到已跟踪的 Skill，直接使用安装命令即可。
+也可以重新执行安装命令，效果相同。如果更新命令提示没有找到已跟踪的 Skill，直接使用安装命令即可。
 
 ## 调用方式
 
