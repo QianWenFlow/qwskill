@@ -64,6 +64,16 @@ npx -y skills add QianWenFlow/qwskill -g --all
 
 也可以直接用自然语言说明你想接受采访的经历、感受、想法或判断。
 
+## 更新
+
+如果此前已经安装，可以更新两个公开入口：
+
+```bash
+npx -y skills update qws qws-interview -g -y
+```
+
+重新执行上面的安装命令，也会覆盖为最新版本。如果更新命令提示没有找到已跟踪的 Skill，直接使用安装命令即可。
+
 ## 调用方式
 
 ```text
