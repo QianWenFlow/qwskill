@@ -11,7 +11,9 @@ from pathlib import Path
 
 
 THEORY_HEADING_RE = re.compile(r"^## 理论注释[ \t]*$", re.MULTILINE)
-TOPICS_HEADING_RE = re.compile(r"^## 可独立展开的选题方向[ \t]*$", re.MULTILINE)
+# Accept the previous topic heading when checking existing documents.
+TOPICS_HEADING_RE = re.compile(r"^## 可独立展开的选题(?:方向)?[ \t]*$", re.MULTILINE)
+MATERIALS_HEADING_RE = re.compile(r"^## 待探索的素材[ \t]*$", re.MULTILINE)
 INLINE_RE = re.compile(r"（\[([^\]\n]+)\]\(#(theory-[A-Za-z0-9_-]+)\)）")
 ANCHOR_RE = re.compile(r"<a\s+id=[\"'](theory-[^\"']+)[\"']\s*></a>")
 
@@ -26,13 +28,20 @@ def normalize(text: str) -> str:
 
 def split_final(text: str) -> tuple[str, str]:
     topics = list(TOPICS_HEADING_RE.finditer(text))
+    materials = list(MATERIALS_HEADING_RE.finditer(text))
     if len(topics) > 1:
         raise OverlayError("发现多个选题附录。")
-    if topics:
-        appendix = text[topics[0].start() :]
+    if len(materials) > 1:
+        raise OverlayError("发现多个待探索素材附录。")
+    if topics and materials and topics[0].start() > materials[0].start():
+        raise OverlayError("选题附录必须位于待探索素材之前。")
+    appendices = topics + materials
+    if appendices:
+        start = min(match.start() for match in appendices)
+        appendix = text[start:]
         if THEORY_HEADING_RE.search(appendix):
-            raise OverlayError("选题附录必须位于理论注释之后。")
-        text = text[: topics[0].start()].rstrip() + "\n"
+            raise OverlayError("选题与待探索素材附录必须位于理论注释之后。")
+        text = text[:start].rstrip() + "\n"
     matches = list(THEORY_HEADING_RE.finditer(text))
     if len(matches) > 1:
         raise OverlayError("发现多个“## 理论注释”章节。")
@@ -81,24 +90,29 @@ def self_test() -> None:
         "# 示例\n\n第一个判断。（[理论甲](#theory-1)）\n\n第二个判断。\n\n"
         "## 理论注释\n\n<a id=\"theory-1\"></a>\n### 理论甲\n"
     )
-    verify_overlay(baseline, valid)
-    appendix = "\n## 可独立展开的选题方向\n\n根据现有材料，这份知识稿可以进一步展开为：\n\n1. 示例问题\n"
-    verify_overlay(baseline, baseline + appendix)
-    verify_overlay(baseline, valid + appendix)
-    invalid = valid.replace("第二个判断。", "第二个判断。新增理论推导。")
-    try:
-        verify_overlay(baseline, invalid)
-    except OverlayError:
-        pass
-    else:
-        raise AssertionError("自测未能拦截正文改动。")
-    for invalid_final in (invalid + appendix, valid + appendix + appendix, baseline + appendix + "\n## 理论注释\n"):
+    topics = "\n## 可独立展开的选题\n\n1. 示例问题\n"
+    materials = "\n## 待探索的素材\n\n1. 具体线索；尚需查明原因。\n"
+    legacy = topics.replace("可独立展开的选题", "可独立展开的选题方向")
+    for body in (baseline, valid):
+        for appendix in ("", topics, materials, topics + materials, legacy, legacy + materials):
+            verify_overlay(baseline, body + appendix)
+
+    changed = valid.replace("第二个判断。", "第二个判断。新增理论推导。")
+    invalid_finals = [
+        changed, changed + topics, changed + materials, changed + topics + materials,
+        valid + topics + topics, valid + topics + legacy,
+        valid + materials + materials, valid + materials + topics,
+        baseline + topics + "\n## 理论注释\n",
+        baseline + materials + "\n## 理论注释\n",
+        valid.replace('<a id="theory-1"></a>', '<a id="theory-2"></a>') + topics + materials,
+    ]
+    for invalid_final in invalid_finals:
         try:
             verify_overlay(baseline, invalid_final)
         except OverlayError:
             pass
         else:
-            raise AssertionError("自测未能拦截附录或正文错误。")
+            raise AssertionError("自测未能拦截正文、锚点或附录结构错误。")
     print("self-test passed")
 
 
