@@ -11,6 +11,7 @@ from pathlib import Path
 
 
 THEORY_HEADING_RE = re.compile(r"^## 理论注释[ \t]*$", re.MULTILINE)
+TOPICS_HEADING_RE = re.compile(r"^## 可独立展开的选题方向[ \t]*$", re.MULTILINE)
 INLINE_RE = re.compile(r"（\[([^\]\n]+)\]\(#(theory-[A-Za-z0-9_-]+)\)）")
 ANCHOR_RE = re.compile(r"<a\s+id=[\"'](theory-[^\"']+)[\"']\s*></a>")
 
@@ -24,6 +25,14 @@ def normalize(text: str) -> str:
 
 
 def split_final(text: str) -> tuple[str, str]:
+    topics = list(TOPICS_HEADING_RE.finditer(text))
+    if len(topics) > 1:
+        raise OverlayError("发现多个选题附录。")
+    if topics:
+        appendix = text[topics[0].start() :]
+        if THEORY_HEADING_RE.search(appendix):
+            raise OverlayError("选题附录必须位于理论注释之后。")
+        text = text[: topics[0].start()].rstrip() + "\n"
     matches = list(THEORY_HEADING_RE.finditer(text))
     if len(matches) > 1:
         raise OverlayError("发现多个“## 理论注释”章节。")
@@ -73,6 +82,9 @@ def self_test() -> None:
         "## 理论注释\n\n<a id=\"theory-1\"></a>\n### 理论甲\n"
     )
     verify_overlay(baseline, valid)
+    appendix = "\n## 可独立展开的选题方向\n\n根据现有材料，这份知识稿可以进一步展开为：\n\n1. 示例问题\n"
+    verify_overlay(baseline, baseline + appendix)
+    verify_overlay(baseline, valid + appendix)
     invalid = valid.replace("第二个判断。", "第二个判断。新增理论推导。")
     try:
         verify_overlay(baseline, invalid)
@@ -80,6 +92,13 @@ def self_test() -> None:
         pass
     else:
         raise AssertionError("自测未能拦截正文改动。")
+    for invalid_final in (invalid + appendix, valid + appendix + appendix, baseline + appendix + "\n## 理论注释\n"):
+        try:
+            verify_overlay(baseline, invalid_final)
+        except OverlayError:
+            pass
+        else:
+            raise AssertionError("自测未能拦截附录或正文错误。")
     print("self-test passed")
 
 
