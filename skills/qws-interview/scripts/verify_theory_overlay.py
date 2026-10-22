@@ -14,6 +14,7 @@ THEORY_HEADING_RE = re.compile(r"^## 理论注释[ \t]*$", re.MULTILINE)
 # Accept the previous topic heading when checking existing documents.
 TOPICS_HEADING_RE = re.compile(r"^## 可独立展开的选题(?:方向)?[ \t]*$", re.MULTILINE)
 MATERIALS_HEADING_RE = re.compile(r"^## 待探索的素材[ \t]*$", re.MULTILINE)
+TRADEOFFS_HEADING_RE = re.compile(r"^## 取舍说明[ \t]*$", re.MULTILINE)
 INLINE_RE = re.compile(r"（\[([^\]\n]+)\]\(#(theory-[A-Za-z0-9_-]+)\)）")
 ANCHOR_RE = re.compile(r"<a\s+id=[\"'](theory-[^\"']+)[\"']\s*></a>")
 
@@ -29,18 +30,26 @@ def normalize(text: str) -> str:
 def split_final(text: str) -> tuple[str, str]:
     topics = list(TOPICS_HEADING_RE.finditer(text))
     materials = list(MATERIALS_HEADING_RE.finditer(text))
+    tradeoffs = list(TRADEOFFS_HEADING_RE.finditer(text))
     if len(topics) > 1:
         raise OverlayError("发现多个选题附录。")
     if len(materials) > 1:
         raise OverlayError("发现多个待探索素材附录。")
+    if len(tradeoffs) > 1:
+        raise OverlayError("发现多个取舍说明附录。")
     if topics and materials and topics[0].start() > materials[0].start():
         raise OverlayError("选题附录必须位于待探索素材之前。")
-    appendices = topics + materials
+    if tradeoffs and (
+        (topics and topics[0].start() > tradeoffs[0].start())
+        or (materials and materials[0].start() > tradeoffs[0].start())
+    ):
+        raise OverlayError("取舍说明附录必须位于选题与待探索素材之后。")
+    appendices = topics + materials + tradeoffs
     if appendices:
         start = min(match.start() for match in appendices)
         appendix = text[start:]
         if THEORY_HEADING_RE.search(appendix):
-            raise OverlayError("选题与待探索素材附录必须位于理论注释之后。")
+            raise OverlayError("文末附录必须位于理论注释之后。")
         text = text[:start].rstrip() + "\n"
     matches = list(THEORY_HEADING_RE.finditer(text))
     if len(matches) > 1:
@@ -92,19 +101,29 @@ def self_test() -> None:
     )
     topics = "\n## 可独立展开的选题\n\n1. 示例问题\n"
     materials = "\n## 待探索的素材\n\n1. 具体线索；尚需查明原因。\n"
+    tradeoffs = "\n## 取舍说明\n\n完整原话见`01`。正文删减或合并了以下内容：\n\n| 删了什么 | 为什么删 | 现在在哪 |\n| --- | --- | --- |\n| 案例（T015） | 与正文案例含义相同 | 进入选题 1 |\n"
     legacy = topics.replace("可独立展开的选题", "可独立展开的选题方向")
     for body in (baseline, valid):
-        for appendix in ("", topics, materials, topics + materials, legacy, legacy + materials):
+        for appendix in (
+            "", topics, materials, tradeoffs, topics + materials,
+            topics + tradeoffs, materials + tradeoffs, topics + materials + tradeoffs,
+            legacy, legacy + materials, legacy + materials + tradeoffs,
+        ):
             verify_overlay(baseline, body + appendix)
 
     changed = valid.replace("第二个判断。", "第二个判断。新增理论推导。")
     invalid_finals = [
-        changed, changed + topics, changed + materials, changed + topics + materials,
+        changed, changed + topics, changed + materials,
+        changed + topics + materials + tradeoffs,
         valid + topics + topics, valid + topics + legacy,
         valid + materials + materials, valid + materials + topics,
+        valid + tradeoffs + tradeoffs, valid + tradeoffs + topics,
+        valid + tradeoffs + materials, valid + topics + tradeoffs + materials,
         baseline + topics + "\n## 理论注释\n",
         baseline + materials + "\n## 理论注释\n",
-        valid.replace('<a id="theory-1"></a>', '<a id="theory-2"></a>') + topics + materials,
+        baseline + tradeoffs + "\n## 理论注释\n",
+        valid.replace('<a id="theory-1"></a>', '<a id="theory-2"></a>')
+        + topics + materials + tradeoffs,
     ]
     for invalid_final in invalid_finals:
         try:
