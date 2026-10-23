@@ -26,13 +26,9 @@ qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
 npx -y skills add QianWenFlow/qwskill -g --all
 ```
 
-### 已经安装：更新到最新版
+### 已经安装：装上新的 Skill，并更新到最新版
 
-```bash
-npx -y skills update qws qws-interview qws-zoom-out -g -y
-```
-
-也可以重新执行安装命令覆盖到最新版本；更新命令无法识别现有安装时，使用安装命令即可
+再执行一次上面的安装命令即可：新开源的 Skill 会装上，已经装过的 Skill 也会更新到最新版
 
 ## 使用
 
