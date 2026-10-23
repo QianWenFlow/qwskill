@@ -1,58 +1,26 @@
-# qws-interview
+# qwskill
 
-这次开源的是一个「AI 采访 Skill」
+qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
 
-它把你脑中零散、还没说清楚的经历、想法和判断，整理成可以直接继续创作的知识稿。同时保留完整采访记录，找出还能继续展开的选题和素材
+一个把你没说清楚的经历和想法整理成可以继续创作的知识稿，一个在你和 AI 反复修改、越改越乱时，帮你跳出局部视角，找到正确的解决办法。两个 Skill 可以分别调用
 
-采访时一次只问一个问题，通过连续、非诱导式追问，把没说清楚的部分问清楚，不会替你编造观点
+## 有哪些 Skill
 
-## 它能解决哪些问题
+- **「AI 采访 Skill」** `/qws-interview`
 
-- 总觉得自己没有什么可讲，脑子里有零散想法，却组织不成完整表达；
-- 在一个领域积累了很多经验，却说不清自己的判断依据和具体做法；
-- 不知道哪些经历和判断值得表达；
-- 聊出了很多内容，却整理不成一篇完整文稿；
-- 做完一篇内容后，不知道现有材料还能展开成哪些选题
+  通过连续、非诱导式的提问，把零散的经历、想法和判断整理成知识稿，同时保留完整采访记录，并找出可以继续展开的选题。[详细说明](skills/qws-interview/README.md)
 
-一段经历或感受、一次重要选择，或者一个还没想清楚的问题，都可以作为采访起点。你不需要写提纲，也不需要把观点整理完整，就可以直接开始采访
+- **「升维 Skill」** `/qws-zoom-out`
 
-## 你会得到什么
-
-一次完整采访生成两份文件。已有完整采访记录时，可以直接整理，不必重新采访
-
-### 1. 完整采访记录
-
-`01-完整采访记录.md` 保存每一轮提问、你的原始回答和补充材料。以后核对知识稿、接着采访、寻找案例或继续创作时，都可以回来看当时具体聊了什么
-
-### 2. 知识稿、选题和待探索素材
-
-`02-采访分析与知识整理.md` 以知识稿正文为主体，并根据本次材料附上相应清单：
-
-- **知识稿正文**
-
-  你会得到一篇可以独立阅读、检查、修改和复用的知识稿，不必再重新梳理整份对话。它可以继续做成公众号文章、口播稿、视频脚本、思维导图或课程内容，也可以放进知识库，作为长期内容资产
-
-  知识稿会把多轮问答中的结论、理由、案例和边界组织起来，让分散的回答形成清楚的主线
-
-- **选题清单**
-
-  从这次采访中找出可以独立展开的选题。每个选题都有现成的观点和材料，你可以选一个继续写成文章、口播稿或视频脚本
-
-- **待探索的素材**
-
-  保留已经发现价值、但还缺少关键经历、事实或解释的内容，方便以后继续采访
-
-- **取舍说明**
-
-  知识稿只围绕一个主问题展开，不把采访里的每句话都搬进正文。文末用一张表列出删了什么、为什么删、现在在哪，完整原话仍在 `01` 里
+  反复修改仍不满意时，帮你跳出当前的局部视角，从更高的维度找到正确的解决办法，并在同一条回复里给出改法。[详细说明](skills/qws-zoom-out/README.md)
 
 ## 安装与更新
 
 支持 Codex、Claude Code、Grok、豆包、WorkBuddy，以及其他支持 Skills 的 Agent
 
-### 还没有安装：安装 QW Skills
+### 还没有安装：安装 qwskill
 
-在能够运行 `npx` 的终端中执行：
+在能够运行 `npx` 的终端中执行，会一次装好全部 Skill：
 
 ```bash
 npx -y skills add QianWenFlow/qwskill -g --all
@@ -61,20 +29,21 @@ npx -y skills add QianWenFlow/qwskill -g --all
 ### 已经安装：更新到最新版
 
 ```bash
-npx -y skills update qws qws-interview -g -y
+npx -y skills update qws qws-interview qws-zoom-out -g -y
 ```
 
 也可以重新执行安装命令覆盖到最新版本；更新命令无法识别现有安装时，使用安装命令即可
 
 ## 使用
 
-直接调用采访入口：
+直接调用对应 Skill：
 
 ```text
 /qws-interview
+/qws-zoom-out
 ```
 
-也可以通过 QW Skills 统一入口调用：
+不确定该用哪一个时，可以通过统一入口调用，它会根据你的请求选择对应的 Skill：
 
 ```text
 /qws
@@ -82,48 +51,9 @@ npx -y skills update qws qws-interview -g -y
 
 例如：
 
-> 想做自媒体，却总觉得自己没什么可讲。请采访我，帮我找选题。
+> /qws-interview 想做自媒体，却总觉得自己没什么可讲。请采访我，帮我找选题。
 
-> 我想把自己赚钱成功的经验整理成方法论，请采访我。
-
-> 这是已经完成的采访记录，请直接整理成知识稿，并找出可独立展开的选题和待探索的素材。
-
-## 它怎样工作
-
-- **先说明大概要聊几轮**
-
-  开始前，它会告诉你大概要聊几轮。说清楚了就结束，需要继续追问时，会说明原因，由你决定是否继续。你可以随时暂停或结束
-
-- **根据你的回答继续追问**
-
-  把追问集中在本轮主题的关键部分，逐步把问题问清楚。结束前，也会问你还有没有想补充的内容
-
-- **保留你的原话**
-
-  每一轮问答都会保存，方便你随时回看。整理后的文字和后来查到的资料，会与你实际说过的话区分开。准备把内容公开发表时，还会询问必要的案例和细节
-
-- **整理成稿时保留你的原意**
-
-  知识稿会保留你的原有观点和成立条件，不替你编造观点，也不编造理论
-
-  如果已有理论能帮助解释采访内容，会在核实后补入，并附上来源链接，说明哪些解释来自外部资料
-
-- **继续发现选题和待探索素材**
-
-  整理完成后，它会回看这次聊到的内容，把已经有足够材料、可以单独写的列为选题，把还需要补充经历、事实或解释的留下来，供你以后继续探索
-
-## 运行条件
-
-- 理论检索和核验需要联网；
-- 检查理论标注是否改动正文需要 Python 3
-
-## 边界与隐私
-
-“可独立展开的选题”只表示现有材料已经足以回答这个问题；是否适合具体平台和目标受众，还需要后续筛选
-
-本 Skill 从文字材料开始采访和整理，音视频材料需要先转写。还没说清楚的问题会保留为待探索素材。正式选题、标题、口播或发布稿等属于后续制作
-
-采访记录和知识稿默认写入用户指定的本地目录。理论核验需要联网，但不会向外部服务发送与核验无关的私密原文。公开发布采访内容或写入远程仓库，需要用户另行授权
+> /qws-zoom-out 这条推文在几个 AI 之间改出了好几个方向，我拿不定主意，看看卡在哪。
 
 <details>
 <summary><strong>文件结构</strong></summary>
@@ -132,53 +62,36 @@ npx -y skills update qws qws-interview -g -y
 qwskill/
 ├── README.md
 ├── LICENSE
+├── .gitignore
 └── skills/
     ├── qws/
     │   └── SKILL.md
-    └── qws-interview/
+    ├── qws-interview/
+    │   ├── README.md
+    │   ├── SKILL.md
+    │   ├── agents/openai.yaml
+    │   ├── scripts/
+    │   │   └── verify_theory_overlay.py
+    │   └── references/
+    │       ├── contract-writer-protocol.md
+    │       ├── interview-workflow.md
+    │       └── knowledge-validation.md
+    └── qws-zoom-out/
+        ├── README.md
         ├── SKILL.md
         ├── agents/openai.yaml
-        ├── scripts/
-        │   └── verify_theory_overlay.py
         └── references/
-            ├── contract-writer-protocol.md
-            ├── interview-workflow.md
-            └── knowledge-validation.md
+            ├── system-scope-model.md
+            ├── landing-text.md
+            └── landing-content.md
 ```
 
 </details>
 
-## 设计依据（不参与每次运行）
-
-运行时文件只保留可执行规则；以下内容说明这些规则的来源，不是知识稿必须出现的理论，也不增加采访、写作或理论标注步骤
-
-### 知识提取与校验
-
-- 迈克尔·波兰尼的默会知识理论提醒我们：我们所知道的，多于我们所能言传的
-- 野中郁次郎与竹内弘高的 SECI 模型用于解释隐性知识如何通过“外化”转为显性知识，参考 [The Knowledge-Creating Company](https://academic.oup.com/book/52097)
-- 认知任务分析与关键决策法用于从真实事件、线索、选项、判断和后果中提取专家知识
-- Whetten 的 what／how／why 与 who／where／when 用于检查解释与边界
-- Popper 与 Kuhn 提供反例、框架和异常的检验意识
-
-### 问题与观点组织
-
-- QUD 用于维护主问题、子问题、推进关系和返回位置，参考 Craige Roberts 的 [Information Structure in Discourse](https://semanticsarchive.net/Archive/WYzOTRkO/InfoStructure.pdf)
-- van Fraassen 的 `P–X–R` 用于区分待解释现象、对比预期和解释类型，参考 [The Pragmatic Theory of Explanation](https://fitelson.org/290/vanfraassen_pte.pdf)
-- Jobs to Be Done 只校验文章是否帮助读者推进理解或判断，不决定文章中心、观点顺序和材料去留，参考 [Know Your Customers’ “Jobs to Be Done”](https://hbr.org/2016/09/know-your-customers-jobs-to-be-done)
-
-### 写作与可读性
-
-- Linda Flower 的 Writer-Based／Reader-Based Prose 用于检查作者材料是否已经转成读者可重建的表达，参考 [Writer-Based Prose](https://doi.org/10.58680/ce197916016)
-- Kintsch 与 van Dijk 的文本微观与宏观结构用于检查局部和全文连贯，参考 [Toward a Model of Text Comprehension and Production](https://doi.org/10.1037/0033-295X.85.5.363)
-- [ISO 24495-1:2023](https://www.iso.org/standard/78907.html) 用于检查相关、易找、易懂和可用
-- 冗余效应用于检查无独立作用的重复，但不能机械删除观点、证据、逻辑连接或边界，参考 [The Redundancy Principle in Multimedia Learning](https://doi.org/10.1017/CBO9781139547369.013)
-
-这些框架是设计采访和写作方法的参考，不能用来证明采访中谈到的商业、心理或社会观点。解释具体内容所用的理论，仍需另外查找和核实
-
 ## 项目信息
 
 - 作者：[千文Flow](https://x.com/QianWenFlow)
-- 特别感谢 dontbesilent 开源的 `dbskill`，为本 Skill 的结构校验与开源准备提供了工具支持
+- 特别感谢 dontbesilent 开源的 [dbskill](https://github.com/dontbesilent2025/dbskill)，为本项目的结构校验与开源准备提供了工具支持
 
 ## 许可证
 

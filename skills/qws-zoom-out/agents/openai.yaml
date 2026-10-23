@@ -1,0 +1,4 @@
+interface:
+  display_name: "qws-zoom-out"
+  short_description: "跳出当前局部，判断问题所在的更大系统和正确解决层级"
+  default_prompt: "Use $qws-zoom-out to check whether the current problem is only a local symptom, identify the relevant larger system, choose the correct intervention level, and give the concrete fix or the one decision needed in the same reply."
