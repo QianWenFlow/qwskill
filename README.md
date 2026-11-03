@@ -2,7 +2,7 @@
 
 qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
 
-一个把你没说清楚的经历和想法整理成可以继续创作的知识稿，一个在你和 AI 反复修改、越改越乱时，帮你跳出局部视角，找到正确的解决办法。两个 Skill 可以分别调用
+一个把你没说清楚的经历和想法整理成可以继续创作的知识稿，另一个在第一次提问或反复修改时，检查问题问得对不对、哪些做法可以省掉，并给出具体改法。两个 Skill 可以分别调用
 
 ## 有哪些 Skill
 
@@ -12,7 +12,7 @@ qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
 
 - **「升维 Skill」** `/qws-zoom-out`
 
-  反复修改仍不满意时，帮你跳出当前的局部视角，从更高的维度找到正确的解决办法，并在同一条回复里给出改法。[详细说明](skills/qws-zoom-out/README.md)
+  第一次提问或反复修改时，检查问题本身、可省掉的做法和需要介入的层级，并在同一条回复里给出具体改法。[详细说明](skills/qws-zoom-out/README.md)
 
 ## 安装与更新
 
@@ -78,6 +78,8 @@ qwskill/
         ├── agents/openai.yaml
         └── references/
             ├── system-scope-model.md
+            ├── method-sources.md
+            ├── landing-ai.md
             ├── landing-text.md
             └── landing-content.md
 ```
