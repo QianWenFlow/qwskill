@@ -1,3 +1,4 @@
+
 # qwskill
 
 qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
@@ -14,7 +15,7 @@ qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
 
 - **「升维 Skill」** `/qws-zoom-out`
 
-  它先检查你的问题本身问得对不对、哪些做法可以不用再做，再找到问题真正出在哪，并在同一条回复里给出改法。[详细说明](skills/qws-zoom-out/README.md)
+  它不急着帮你改下一版，会看出你是不是在解决一个错的问题、问题真正出在哪，直接给出正确的改法。[详细说明](skills/qws-zoom-out/README.md)
 
 ## 安装与更新
 
