@@ -12,7 +12,7 @@ qwskill 目前开源了两个 Skill：「AI 采访 Skill」和「升维 Skill」
 
 - **「升维 Skill」** `/qws-zoom-out`
 
-  你反复修改、越改越不满意的时候，可以调用它。它先检查你的问题本身问得对不对，再帮你跳出当前的局部视角，站到更高的维度看这件事，找到正确的解决办法，并在同一条回复里给出改法。[详细说明](skills/qws-zoom-out/README.md)
+  不知道问题出在哪、怎么改都不对，或者觉得自己被困住了，都可以调用它。它先检查你的问题本身问得对不对，再帮你跳出当前的局部视角，站到更高的维度看这件事，找到正确的解决办法，并在同一条回复里给出改法。[详细说明](skills/qws-zoom-out/README.md)
 
 ## 安装与更新
 
@@ -49,7 +49,7 @@ npx -y skills add QianWenFlow/qwskill -g --all
 
 > /qws-interview 想做自媒体，却总觉得自己没什么可讲。请采访我，帮我找选题。
 
-> /qws-zoom-out 这条推文在几个 AI 之间改出了好几个方向，我拿不定主意，看看卡在哪。
+> /qws-zoom-out 两个方案各有道理，问了几个 AI 也拿不定主意。到底选哪个？
 
 <details>
 <summary><strong>文件结构</strong></summary>
