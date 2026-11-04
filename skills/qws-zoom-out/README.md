@@ -1,21 +1,21 @@
+
 # qws-zoom-out
 
 这次开源的是一个「升维 Skill」，它是 [qwskill](../../README.md) 中的一个 Skill
 
-不知道问题出在哪、怎么改都不对，或者觉得自己被困住了，都可以调用它。它先检查你的问题本身问得对不对，再帮你跳出当前的局部视角，站到更高的维度看这件事，找到正确的解决办法，并在同一条回复里给出改法
+不管是文案、图片、PPT 还是 Skill，改了很多遍还是不对，最后只能将就，很可能是你一直在解决一个错的问题。「升维 Skill」不急着帮你改下一版，它先帮你跳出眼前的局部，站到更高的维度，看清问题到底是什么、出在哪，再直接给出正确的解法
 
 英文名 Zoom Out 是镜头拉远的意思：贴得太近，只能看到眼前困住你的那一处；拉远以后，才看得见它在整件事里的位置，问题真正出在哪里
 
 ## 它能解决哪些问题
 
-- 同一个地方改了很多遍还是不对：问题可能不在这个地方，而在整体的结构，甚至方向；
+- 盯着同一处反复改：问题可能不在这一处，而在整体的结构，甚至方向；
 - 问题像打地鼠，改好一处又在别处冒出来：这些问题背后很可能是同一个原因；
 - 几个 AI 各说各的，或者讨论了好几轮还是回到原点：你们比较方案的标准可能一直在变；
 - 补丁越打越多、做法越加越多，结果反而越来越糟：每多加一条，都可能带出新的问题；
-- 两个要求互相打架：顾了这头就丢了那头，怎么折中都不满意；
-- 说不清哪里不对，最后只能将就着定下来：可能问题本身就问偏了
+- 两个要求互相打架：顾了这头就丢了那头，怎么折中都不满意
 
-不限领域：写作、内容、经营、管理、使用 AI，任何时候觉得自己被困在一个局部里，都可以调用它
+不限领域：写作、自媒体、设计、经营管理、用 AI，任何时候，只要你觉得自己被困住了，都可以调用它帮你解决
 
 ## 你会得到什么
 
@@ -59,7 +59,7 @@
 
 ## 边界与隐私
 
-调用它就会走完整个检查并给出最终结果，不需要再说「升维」：用 `/qws-zoom-out`、`$qws-zoom-out` 或 Skill 链接调用，或者说「升维」、「从全局看」、「这是不是局部问题」这类话都可以。你在同一件事上反复修改仍不满意时，Agent 识别到后会在回复末尾提醒一句可以升维，不打断原来的任务
+你在同一件事上反复修改仍不满意时，Agent 会在回复末尾提醒一句可以升维，不打断原来的任务
 
 价值取舍由你决定。已经发生的执行错误，例如文件没保存对、命令执行失败，不属于它处理的范围
 
@@ -96,7 +96,6 @@
 - Jens Rasmussen 的抽象层级，用于从目的到具体做法分层看一个系统，参考 [Work domain analysis](https://en.wikipedia.org/wiki/Work_domain_analysis)
 - Jens Rasmussen 关于动态社会中风险管理的研究，用于提醒问题常出在层与层的交接上，参考 [Risk management in a dynamic society](https://orbit.dtu.dk/en/publications/risk-management-in-a-dynamic-society-a-modelling-problem/)
 - David Parnas 的模块分解准则，用于把经常变化的部分和不常变的部分分开，参考 [On the criteria to be used in decomposing systems into modules](https://blog.acolyer.org/2016/09/05/on-the-criteria-to-be-used-in-decomposing-systems-into-modules/)
-- Stafford Beer 的可行系统模型，用于按决策范围和时间尺度拆分职责，参考 [Viable System Model](https://ieeemilestones.ethw.org/w/images/7/73/Viable_system_Model.pdf)
 - RFC 3439 中「分层被认为有害」一节，用于提醒层分得太多也会失败，参考 [RFC 3439](https://datatracker.ietf.org/doc/rfc3439/)
 - Anthropic 的 Building effective agents，用于判断 AI 任务什么时候才需要拆给不同的智能体，参考 [Building effective agents](https://www.anthropic.com/research/building-effective-agents)
 - Herbert Simon 的近似可分解系统，用于判断什么时候局部处理就足够、可以停止扩展，参考 [The Architecture of Complexity](https://www.andrew.cmu.edu/course/15-440/assets/READINGS/simon-architecture-of-complexity-1962.pdf)
